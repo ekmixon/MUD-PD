@@ -928,7 +928,7 @@ class Mac2IP(dict):
 
     def add(self, mac, ip, ip_ver=None):
         if mac not in self:
-            super().__setitem__(mac, dict())
+            super().__setitem__(mac, {})
 
         if ip_ver is None:
             ip_ver = IP(ip).version()
@@ -949,14 +949,12 @@ class Mac2IP(dict):
     # TODO: Determine if can be removed
     def has_multiple_ip(self, mac, ip_ver=None):
         if mac in self:
-            if ip_ver is not None:
-                if ip_ver in self[mac]:
-                    if len(self[mac][ip_ver]) > 1:
-                        return True
-            else:
+            if ip_ver is None:
                 for ver in self[mac]:
                     if len(self[mac][ver]) > 1:
                         return True
+            elif ip_ver in self[mac] and len(self[mac][ip_ver]) > 1:
+                return True
         return False
 
     # TODO: Determine if can be removed

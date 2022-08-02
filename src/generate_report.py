@@ -54,9 +54,9 @@ class ReportGenerator:
     def __init__(self, device_info):
         self.logger = logging.getLogger(__name__)
         self.header = 'This document serves to indicate the devices and operations captured ' \
-                      'in addition to any specific procedures or environmental details of the captures ' \
-                      'that differs from the general procedure found in the main README.txt'
-        self.date = datetime.today().date()
+                          'in addition to any specific procedures or environmental details of the captures ' \
+                          'that differs from the general procedure found in the main README.txt'
+        self.date = datetime.now().date()
         self.device_info = device_info
         dir_reports = 'reports/'
         # Check if the reports directory exists

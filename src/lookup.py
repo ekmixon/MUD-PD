@@ -62,7 +62,7 @@ def lookup_fingerbank(dhcp_fingerprint, device_hostname, mac, api_key):
     data = {"dhcp_fingerprint": dhcp_fingerprint, "hostname": device_hostname, "mac": mac}
     logger.debug("fingerbank data: %s", data)
 
-    url = base_url + 'key=' + api_key
+    url = f'{base_url}key={api_key}'
     logger.info("Fingerbank request sent")
     r = requests.get(url, data)
     if r.status_code == 200:

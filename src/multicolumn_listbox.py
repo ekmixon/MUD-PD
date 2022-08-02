@@ -71,7 +71,7 @@ class MultiColumnListbox(object):
     # adjust column's width if necessary to fit each value
     def _adjust_width(self, item):
         for ix, val in enumerate(item):
-            col_w = tkFont.Font().measure(str(val) + "__")
+            col_w = tkFont.Font().measure(f"{str(val)}__")
             if self.tree.column(self.header[ix], width=None) < (col_w + 2 * PAD_X):
                 self.tree.column(self.header[ix], width=(col_w + 2 * PAD_X))
 
@@ -95,11 +95,7 @@ class MultiColumnListbox(object):
         self.tree.heading(col, command=lambda col=col: self._sortby(col, int(not descending)))
 
     def _update_display_columns(self):
-        self.display_columns = list()
-
-        for h in self.header:
-            if h not in self.exclusion_list:
-                self.display_columns.append(h)
+        self.display_columns = [h for h in self.header if h not in self.exclusion_list]
 
         self.tree["displaycolumns"] = self.display_columns
 
@@ -121,24 +117,14 @@ class MultiColumnListbox(object):
     def get_selection_set(self):
         sel = self.selection()
 
-        sel_val = list()
-        for s in sel:
-            sel_val.append(self.get(s))
-
-        return sel_val
+        return [self.get(s) for s in sel]
 
     def get_list(self):
-        temp_list = []
-        for child in self.tree.get_children():
-            temp_list.append(self.tree.item(child)["values"])
-        return temp_list
+        return [self.tree.item(child)["values"] for child in self.tree.get_children()]
 
     def get_selected_row(self):
         sel = self.selection()
-        if len(sel) > 0:
-            return self.get(self.selection()[0])
-        else:
-            return -1
+        return self.get(self.selection()[0]) if len(sel) > 0 else -1
 
     def focus(self, index):
         if self.num_nodes > 0:
@@ -204,10 +190,7 @@ class MultiColumnListbox(object):
         self._update_display_columns
 
     def is_empty(self):
-        if self.num_nodes == 0:
-            return True
-        else:
-            return False
+        return self.num_nodes == 0
 
     def remove_by_value(self, value, column):
         children = self.tree.get_children()
@@ -233,10 +216,7 @@ def printSelection(tree):  # , event=None):
 
     for sel in tree.selection():
         item_list = tree.item(sel)["values"]
-        line = ''
-        for item in item_list:
-            line += str(item) + " "
-
+        line = ''.join(f"{str(item)} " for item in item_list)
         print(line)
 
 
